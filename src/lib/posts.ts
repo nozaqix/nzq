@@ -5,7 +5,10 @@ import { remark } from 'remark';
 import remarkHtml from 'remark-html';
 import remarkGfm from 'remark-gfm';
 
-const postsDirectory = path.join(process.cwd(), 'src/content/works');
+// Cloudflare Pages環境での互換性のため、ビルド時のみfsを使用
+const postsDirectory = typeof process !== 'undefined' && process.cwd 
+  ? path.join(process.cwd(), 'src/content/works')
+  : 'src/content/works';
 
 export interface PostFrontmatter {
   title: string;
@@ -57,75 +60,105 @@ async function processMarkdown(content: string): Promise<string> {
 }
 
 export function getAllPosts(): Post[] {
-  if (!fs.existsSync(postsDirectory)) {
+  // ビルド時のみfsを使用（Cloudflare Pages互換性のため）
+  if (typeof window !== 'undefined') {
     return [];
   }
 
-  const fileNames = fs.readdirSync(postsDirectory);
-  const allPostsData = fileNames
-    .filter((fileName) => fileName.endsWith('.mdx') && fileName !== 'contact.mdx')
-    .map((fileName) => {
-      const slug = fileName.replace(/\.mdx$/, '');
-      const fullPath = path.join(postsDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
-      const { data, content } = matter(fileContents);
+  try {
+    if (!fs.existsSync(postsDirectory)) {
+      return [];
+    }
 
-      return {
-        slug,
-        frontmatter: {
-          title: data.title || '',
-          date: data.date || '',
-          category: data.category || '',
-          slug: data.slug || slug,
-          thumbnail: data.thumbnail || undefined,
-        },
-        content,
-      } as Post;
+    const fileNames = fs.readdirSync(postsDirectory);
+    const allPostsData = fileNames
+      .filter((fileName) => fileName.endsWith('.mdx') && fileName !== 'contact.mdx')
+      .map((fileName) => {
+        const slug = fileName.replace(/\.mdx$/, '');
+        const fullPath = path.join(postsDirectory, fileName);
+        const fileContents = fs.readFileSync(fullPath, 'utf8');
+        const { data, content } = matter(fileContents);
+
+        return {
+          slug,
+          frontmatter: {
+            title: data.title || '',
+            date: data.date || '',
+            category: data.category || '',
+            slug: data.slug || slug,
+            thumbnail: data.thumbnail || undefined,
+          },
+          content,
+        } as Post;
+      });
+
+    // 日付の降順でソート
+    return allPostsData.sort((a, b) => {
+      const dateA = new Date(a.frontmatter.date).getTime();
+      const dateB = new Date(b.frontmatter.date).getTime();
+      return dateB - dateA;
     });
-
-  // 日付の降順でソート
-  return allPostsData.sort((a, b) => {
-    const dateA = new Date(a.frontmatter.date).getTime();
-    const dateB = new Date(b.frontmatter.date).getTime();
-    return dateB - dateA;
-  });
+  } catch (error) {
+    console.error('Error reading posts:', error);
+    return [];
+  }
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const fullPath = path.join(postsDirectory, `${slug}.mdx`);
-  
-  if (!fs.existsSync(fullPath)) {
+  // ビルド時のみfsを使用（Cloudflare Pages互換性のため）
+  if (typeof window !== 'undefined') {
     return null;
   }
 
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
+  try {
+    const fullPath = path.join(postsDirectory, `${slug}.mdx`);
+    
+    if (!fs.existsSync(fullPath)) {
+      return null;
+    }
 
-  // MDXをHTMLに変換
-  const htmlContent = await processMarkdown(content);
+    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const { data, content } = matter(fileContents);
 
-  return {
-    slug,
-    frontmatter: {
-      title: data.title || '',
-      date: data.date || '',
-      category: data.category || '',
-      slug: data.slug || slug,
-      thumbnail: data.thumbnail || undefined,
-    },
-    content,
-    htmlContent,
-  } as Post;
+    // MDXをHTMLに変換
+    const htmlContent = await processMarkdown(content);
+
+    return {
+      slug,
+      frontmatter: {
+        title: data.title || '',
+        date: data.date || '',
+        category: data.category || '',
+        slug: data.slug || slug,
+        thumbnail: data.thumbnail || undefined,
+      },
+      content,
+      htmlContent,
+    } as Post;
+  } catch (error) {
+    console.error(`Error reading post ${slug}:`, error);
+    return null;
+  }
 }
 
 export function getAllSlugs(): string[] {
-  if (!fs.existsSync(postsDirectory)) {
+  // ビルド時のみfsを使用（Cloudflare Pages互換性のため）
+  if (typeof window !== 'undefined') {
     return [];
   }
 
-  const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames
-    .filter((fileName) => fileName.endsWith('.mdx') && fileName !== 'contact.mdx')
-    .map((fileName) => fileName.replace(/\.mdx$/, ''));
+  try {
+    if (!fs.existsSync(postsDirectory)) {
+      return [];
+    }
+
+    const fileNames = fs.readdirSync(postsDirectory);
+    return fileNames
+      .filter((fileName) => fileName.endsWith('.mdx') && fileName !== 'contact.mdx')
+      .map((fileName) => fileName.replace(/\.mdx$/, ''));
+  } catch (error) {
+    console.error('Error reading slugs:', error);
+    return [];
+  }
 }
 

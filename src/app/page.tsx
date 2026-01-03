@@ -4,7 +4,7 @@ import SubHeader from '@/components/SubHeader';
 import Footer from '@/components/Footer';
 import PostsList from '@/components/PostsList';
 
-export default function Home() {
+export default async function Home() {
   const posts = getAllPosts();
 
   return (

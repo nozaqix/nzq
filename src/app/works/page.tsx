@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WorksList from '@/components/WorksList';
 
-export default function WorksPage() {
+export default async function WorksPage() {
   const allPosts = getAllPosts();
   const releasePosts = allPosts.filter((post) => post.frontmatter.category === 'Release');
 
