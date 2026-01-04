@@ -40,7 +40,7 @@ function processHtmlContent(html: string): React.ReactNode {
     (match, level, attrs) => {
       const marginTop = level === '2' ? '2rem' : level === '3' ? '1.5rem' : '1rem';
       const marginBottom = level === '2' ? '1rem' : level === '3' ? '0.75rem' : '0.5rem';
-      return `<h${level}${attrs} style="font-size: 14px !important; color: #B8B9BA !important; font-weight: 700 !important; line-height: 1.5 !important; letter-spacing: 0.6px !important; font-family: Inter, sans-serif !important; margin-top: ${marginTop} !important; margin-bottom: ${marginBottom} !important; display: block;">`;
+      return `<h${level}${attrs} style="font-size: 14px !important; color: #ffffff !important; font-weight: 700 !important; line-height: 1.5 !important; letter-spacing: 0.6px !important; font-family: Inter, sans-serif !important; margin-top: ${marginTop} !important; margin-bottom: ${marginBottom} !important; display: block;">`;
     }
   );
 
@@ -63,7 +63,7 @@ function processHtmlContent(html: string): React.ReactNode {
         <div
           key={`html-${partCounter++}`}
           dangerouslySetInnerHTML={{ __html: segment }}
-          className="prose prose-invert max-w-none text-sm text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter"
+          className="prose prose-invert max-w-none text-sm text-white font-normal leading-normal tracking-[0.6px] font-inter"
         />
       );
     }

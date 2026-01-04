@@ -3,6 +3,12 @@ const nextConfig = {
   output: 'export',
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'nozaqi.work',
+      },
+    ],
   },
   trailingSlash: true,
   // Cloudflare Pages互換性のため、webpack設定を調整
