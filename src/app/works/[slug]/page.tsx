@@ -37,10 +37,14 @@ function processHtmlContent(html: string): React.ReactNode {
     }
   );
 
-  // 画像プレースホルダーを処理
+  // 画像プレースホルダーを処理（最後の:で分割して、srcとaltを抽出）
   processedHtml = processedHtml.replace(
-    /\[IMAGE_PLACEHOLDER:([^:]+?):([^\]]*?)\]/g,
-    (match, src, alt) => {
+    /\[IMAGE_PLACEHOLDER:([^\]]+)\]/g,
+    (match, content) => {
+      // 最後の:で分割
+      const lastColonIndex = content.lastIndexOf(':');
+      const src = lastColonIndex !== -1 ? content.substring(0, lastColonIndex) : content;
+      const alt = lastColonIndex !== -1 ? content.substring(lastColonIndex + 1) : '';
       const placeholder = `__COMPONENT_${componentIndex}__`;
       parts.push(
         <div key={placeholder} className="my-6">
