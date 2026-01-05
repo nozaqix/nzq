@@ -70,7 +70,7 @@ export default function PostsList({ posts }: PostsListProps) {
 
       {/* Right Side - Illustration */}
       <div className="hidden lg:block lg:sticky lg:top-0 lg:self-start flex-shrink min-w-0 w-full max-w-[980px]">
-        <div className="w-full aspect-video bg-gray-800/60 rounded-lg overflow-hidden flex items-center justify-center border border-gray-700/50 relative">
+        <div className="w-full aspect-video bg-gray-800/60 overflow-hidden flex items-center justify-center relative">
           {currentThumbnail ? (
             <Image
               src={currentThumbnail}
