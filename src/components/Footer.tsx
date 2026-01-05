@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
-    <footer className="w-full p-10">
-      <div className="flex gap-4 text-sm text-gray-400">
+    <footer className="w-full p-6 md:p-10">
+      <div className="flex flex-wrap gap-4 text-sm text-gray-400">
         <a
           href="https://x.com/nozaqix"
           target="_blank"

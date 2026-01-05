@@ -81,7 +81,7 @@ export default async function ContactPage() {
       <Header />
 
       {/* Main Container */}
-      <div className="flex flex-col items-start gap-[240px] w-full p-10 flex-1">
+      <div className="flex flex-col items-start gap-[240px] w-full p-6 md:p-10 flex-1">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-[240px] w-full">
           {/* Left Column - Breadcrumb */}
           <div className="w-full lg:w-[480px] flex-shrink-0">

@@ -123,7 +123,7 @@ export default async function PostPage({ params }: PageProps) {
       <Header />
 
       {/* Main Container */}
-      <div className="flex flex-col items-start gap-[240px] w-full p-10 flex-1">
+      <div className="flex flex-col items-start gap-[240px] w-full p-6 md:p-10 flex-1">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-16 w-full min-w-0">
           {/* Left Column - Breadcrumb */}
           <div className="w-full lg:w-[400px] flex-shrink-0 min-w-0">

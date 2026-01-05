@@ -13,7 +13,7 @@ export default async function WorksPage() {
       <Header />
 
       {/* Main Container - Figma Auto Layout */}
-      <div className="flex flex-col items-start gap-[240px] w-full p-10 flex-1">
+      <div className="flex flex-col items-start gap-[240px] w-full p-6 md:p-10 flex-1">
         <WorksList posts={releasePosts} />
       </div>
 

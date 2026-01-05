@@ -13,12 +13,12 @@ export default async function Home() {
       <Header />
 
       {/* SubHeader */}
-      <div className="w-full p-10">
+      <div className="w-full p-6 md:p-10">
         <SubHeader />
       </div>
 
       {/* Main Container - Figma Auto Layout */}
-      <div className="flex flex-col items-start gap-[240px] w-full p-10 flex-1">
+      <div className="flex flex-col items-start gap-[240px] w-full p-6 md:p-10 flex-1">
         <PostsList posts={posts} />
       </div>
 
