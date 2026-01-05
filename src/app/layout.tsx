@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
-import DomainRedirect from "@/components/DomainRedirect";
 
 export const metadata: Metadata = {
   title: "NZQ - Architecting and creating beautiful things",
@@ -9,6 +8,9 @@ export const metadata: Metadata = {
   robots: {
     index: false,
     follow: false,
+  },
+  alternates: {
+    canonical: 'https://nozaqi.work',
   },
 };
 
@@ -20,7 +22,33 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <DomainRedirect />
+        <Script
+          id="domain-redirect"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                if (typeof window !== 'undefined') {
+                  const hostname = window.location.hostname;
+                  if (hostname === 'nzq.pages.dev' || hostname.startsWith('nzq.pages.dev')) {
+                    const newUrl = 'https://nozaqi.work' + window.location.pathname + window.location.search + window.location.hash;
+                    
+                    // SEO対応: meta refreshタグを追加（クローラー用）
+                    if (document.head) {
+                      const metaRefresh = document.createElement('meta');
+                      metaRefresh.httpEquiv = 'refresh';
+                      metaRefresh.content = '0;url=' + newUrl;
+                      document.head.appendChild(metaRefresh);
+                    }
+                    
+                    // 即座にリダイレクト（ブラウザ用）
+                    window.location.replace(newUrl);
+                  }
+                }
+              })();
+            `,
+          }}
+        />
         <Script
           id="clarity-script"
           strategy="afterInteractive"

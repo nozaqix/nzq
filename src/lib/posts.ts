@@ -66,38 +66,38 @@ export function getAllPosts(): Post[] {
   }
 
   try {
-    if (!fs.existsSync(postsDirectory)) {
-      return [];
-    }
+  if (!fs.existsSync(postsDirectory)) {
+    return [];
+  }
 
-    const fileNames = fs.readdirSync(postsDirectory);
-    const allPostsData = fileNames
-      .filter((fileName) => fileName.endsWith('.mdx') && fileName !== 'contact.mdx')
-      .map((fileName) => {
-        const slug = fileName.replace(/\.mdx$/, '');
-        const fullPath = path.join(postsDirectory, fileName);
-        const fileContents = fs.readFileSync(fullPath, 'utf8');
-        const { data, content } = matter(fileContents);
+  const fileNames = fs.readdirSync(postsDirectory);
+  const allPostsData = fileNames
+    .filter((fileName) => fileName.endsWith('.mdx') && fileName !== 'contact.mdx')
+    .map((fileName) => {
+      const slug = fileName.replace(/\.mdx$/, '');
+      const fullPath = path.join(postsDirectory, fileName);
+      const fileContents = fs.readFileSync(fullPath, 'utf8');
+      const { data, content } = matter(fileContents);
 
-        return {
-          slug,
-          frontmatter: {
-            title: data.title || '',
-            date: data.date || '',
-            category: data.category || '',
-            slug: data.slug || slug,
-            thumbnail: data.thumbnail || undefined,
-          },
-          content,
-        } as Post;
-      });
-
-    // 日付の降順でソート
-    return allPostsData.sort((a, b) => {
-      const dateA = new Date(a.frontmatter.date).getTime();
-      const dateB = new Date(b.frontmatter.date).getTime();
-      return dateB - dateA;
+      return {
+        slug,
+        frontmatter: {
+          title: data.title || '',
+          date: data.date || '',
+          category: data.category || '',
+          slug: data.slug || slug,
+          thumbnail: data.thumbnail || undefined,
+        },
+        content,
+      } as Post;
     });
+
+  // 日付の降順でソート
+  return allPostsData.sort((a, b) => {
+    const dateA = new Date(a.frontmatter.date).getTime();
+    const dateB = new Date(b.frontmatter.date).getTime();
+    return dateB - dateA;
+  });
   } catch (error) {
     console.error('Error reading posts:', error);
     return [];
@@ -111,30 +111,30 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   }
 
   try {
-    const fullPath = path.join(postsDirectory, `${slug}.mdx`);
-    
-    if (!fs.existsSync(fullPath)) {
-      return null;
-    }
+  const fullPath = path.join(postsDirectory, `${slug}.mdx`);
+  
+  if (!fs.existsSync(fullPath)) {
+    return null;
+  }
 
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const { data, content } = matter(fileContents);
+  const fileContents = fs.readFileSync(fullPath, 'utf8');
+  const { data, content } = matter(fileContents);
 
-    // MDXをHTMLに変換
-    const htmlContent = await processMarkdown(content);
+  // MDXをHTMLに変換
+  const htmlContent = await processMarkdown(content);
 
-    return {
-      slug,
-      frontmatter: {
-        title: data.title || '',
-        date: data.date || '',
-        category: data.category || '',
-        slug: data.slug || slug,
-        thumbnail: data.thumbnail || undefined,
-      },
-      content,
-      htmlContent,
-    } as Post;
+  return {
+    slug,
+    frontmatter: {
+      title: data.title || '',
+      date: data.date || '',
+      category: data.category || '',
+      slug: data.slug || slug,
+      thumbnail: data.thumbnail || undefined,
+    },
+    content,
+    htmlContent,
+  } as Post;
   } catch (error) {
     console.error(`Error reading post ${slug}:`, error);
     return null;
@@ -148,14 +148,14 @@ export function getAllSlugs(): string[] {
   }
 
   try {
-    if (!fs.existsSync(postsDirectory)) {
-      return [];
-    }
+  if (!fs.existsSync(postsDirectory)) {
+    return [];
+  }
 
-    const fileNames = fs.readdirSync(postsDirectory);
-    return fileNames
-      .filter((fileName) => fileName.endsWith('.mdx') && fileName !== 'contact.mdx')
-      .map((fileName) => fileName.replace(/\.mdx$/, ''));
+  const fileNames = fs.readdirSync(postsDirectory);
+  return fileNames
+    .filter((fileName) => fileName.endsWith('.mdx') && fileName !== 'contact.mdx')
+    .map((fileName) => fileName.replace(/\.mdx$/, ''));
   } catch (error) {
     console.error('Error reading slugs:', error);
     return [];
