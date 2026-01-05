@@ -108,7 +108,71 @@ div[class*="prose"] a:hover {
   }
 }
 
-.page-transition {
-  animation: fadeIn 0.4s ease-out;
+@keyframes fadeInSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInBlur {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* デフォルト: Fade + Slide Up（エレガントで洗練されたアニメーション） */
+.page-transition {
+  animation: fadeInBlur 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 他のアニメーションオプション（コメントアウトして切り替え可能） */
+/*
+.page-transition {
+  animation: fadeInScale 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+*/
+
+/*
+.page-transition {
+  animation: fadeInBlur 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+*/
+
+/*
+.page-transition {
+  animation: slideInFromRight 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+*/
 
