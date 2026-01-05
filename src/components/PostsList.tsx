@@ -32,8 +32,9 @@ export default function PostsList({ posts }: PostsListProps) {
     return `${year}.${month}.${day}`;
   };
 
-  // 現在表示するサムネイルを決定（ホバー中の記事のサムネイル、または最初の記事のサムネイル、またはデフォルト）
-  const currentThumbnail = hoveredThumbnail || posts[0]?.frontmatter.thumbnail || null;
+  // 現在表示するサムネイルを決定（ホバー中の記事のサムネイル、またはデフォルト）
+  const DEFAULT_THUMBNAIL = 'https://assets.nozaqi.work/images/nzq.png';
+  const currentThumbnail = hoveredThumbnail || DEFAULT_THUMBNAIL;
 
   return (
     <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-16 w-full min-w-0">
