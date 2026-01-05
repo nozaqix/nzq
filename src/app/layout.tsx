@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
+import DomainRedirect from "@/components/DomainRedirect";
 
 export const metadata: Metadata = {
   title: "NZQ - Architecting and creating beautiful things",
@@ -19,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
+        <DomainRedirect />
         <Script
           id="clarity-script"
           strategy="afterInteractive"
