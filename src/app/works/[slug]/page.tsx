@@ -6,6 +6,7 @@ import YouTube from '@/components/mdx/YouTube';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import type { Metadata } from 'next';
 
 interface PageProps {
   params: Promise<{
@@ -18,6 +19,15 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({
     slug,
   }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  return {
+    alternates: {
+      canonical: `https://nozaqi.work/works/${slug}/`,
+    },
+  };
 }
 
 // HTMLコンテンツを処理し、プレースホルダーをコンポーネントに置き換える関数

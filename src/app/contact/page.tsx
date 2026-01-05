@@ -3,6 +3,13 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { getPostBySlug } from '@/lib/posts';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://nozaqi.work/contact/',
+  },
+};
 
 async function getContactContent() {
   const contact = await getPostBySlug('contact');

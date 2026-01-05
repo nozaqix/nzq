@@ -2,6 +2,13 @@ import { getAllPosts } from '@/lib/posts';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WorksList from '@/components/WorksList';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://nozaqi.work/works/',
+  },
+};
 
 export default async function WorksPage() {
   const allPosts = getAllPosts();

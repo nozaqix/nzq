@@ -5,13 +5,6 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "NZQ - Architecting and creating beautiful things",
   description: "Portfolio site for composer and designer",
-  robots: {
-    index: false,
-    follow: false,
-  },
-  alternates: {
-    canonical: 'https://nozaqi.work',
-  },
 };
 
 export default function RootLayout({

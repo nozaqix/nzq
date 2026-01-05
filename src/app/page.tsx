@@ -3,6 +3,13 @@ import Header from '@/components/Header';
 import SubHeader from '@/components/SubHeader';
 import Footer from '@/components/Footer';
 import PostsList from '@/components/PostsList';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://nozaqi.work/',
+  },
+};
 
 export default async function Home() {
   const posts = getAllPosts();
