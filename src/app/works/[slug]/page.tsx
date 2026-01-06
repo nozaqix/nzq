@@ -164,12 +164,16 @@ export default async function PostPage({ params }: PageProps) {
               <Link href="/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
                 Home
               </Link>
-              <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
-                {'>'}
-              </span>
-              <Link href="/works/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
-                Works
-              </Link>
+              {post.frontmatter.category === 'Release' && (
+                <>
+                  <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
+                    {'>'}
+                  </span>
+                  <Link href="/works/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
+                    Works
+                  </Link>
+                </>
+              )}
               <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
                 {'>'}
               </span>
