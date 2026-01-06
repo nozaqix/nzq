@@ -22,7 +22,7 @@ export default function SubHeader() {
         <span>Skills</span>
         <span>{' : '}</span>
         <span>
-          {'Compose | Graphic Design | Interface Design | Concept Design | Development | etc...'}
+          {'Compose | Graphic Design | Interface Design | Visual Architect | Development | etc...'}
         </span>
       </div>
     </div>
