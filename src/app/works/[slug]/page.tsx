@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPostBySlug, getAllSlugs } from '@/lib/posts';
 import YouTube from '@/components/mdx/YouTube';
+import PurchaseLinks from '@/components/mdx/PurchaseLinks';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -36,6 +37,28 @@ function processHtmlContent(html: string): React.ReactNode {
   let processedHtml = html;
   let componentIndex = 0;
 
+  // PurchaseLinksプレースホルダーを処理
+  processedHtml = processedHtml.replace(
+    /\[PURCHASE_LINKS_PLACEHOLDER:([^\]]+)\]/g,
+    (match, encoded) => {
+      try {
+        const linksJson = Buffer.from(encoded, 'base64').toString('utf8');
+        const links = JSON.parse(linksJson);
+        if (!Array.isArray(links)) {
+          console.error('PurchaseLinks: links is not an array', links);
+          return match;
+        }
+        const placeholder = `__COMPONENT_${componentIndex}__`;
+        parts.push(<PurchaseLinks key={placeholder} links={links} />);
+        componentIndex++;
+        return placeholder;
+      } catch (error) {
+        console.error('Error parsing PurchaseLinks:', error, 'Encoded:', encoded);
+        return match;
+      }
+    }
+  );
+
   // YouTubeプレースホルダーを処理
   processedHtml = processedHtml.replace(
     /\[YOUTUBE_PLACEHOLDER:([^\]]+)\]/g,
@@ -63,7 +86,7 @@ function processHtmlContent(html: string): React.ReactNode {
             alt={alt || ''}
             width={800}
             height={600}
-            className="w-full h-auto rounded-lg"
+            className="w-full h-auto"
             unoptimized
           />
         </div>
@@ -79,7 +102,7 @@ function processHtmlContent(html: string): React.ReactNode {
     (match, level, attrs) => {
       const marginTop = level === '2' ? '2rem' : level === '3' ? '1.5rem' : '1rem';
       const marginBottom = level === '2' ? '1rem' : level === '3' ? '0.75rem' : '0.5rem';
-      return `<h${level}${attrs} style="font-size: 12px !important; color: #B8B9BA !important; font-weight: 700 !important; line-height: 1.5 !important; letter-spacing: 0.6px !important; font-family: Inter, sans-serif !important; margin-top: ${marginTop} !important; margin-bottom: ${marginBottom} !important; display: block;">`;
+      return `<h${level}${attrs} style="font-size: 14px !important; color: #B8B9BA !important; font-weight: 700 !important; line-height: 1.5 !important; letter-spacing: 0.6px !important; font-family: Inter, sans-serif !important; margin-top: ${marginTop} !important; margin-bottom: ${marginBottom} !important; display: block;">`;
     }
   );
 

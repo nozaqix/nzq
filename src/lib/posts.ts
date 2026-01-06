@@ -27,7 +27,24 @@ export interface Post {
 
 async function processMarkdown(content: string): Promise<string> {
   // カスタムコンポーネントを一時的にプレースホルダーに置き換え
-  const youtubePlaceholder = content.replace(
+  // PurchaseLinksコンポーネントを処理（複数のリンクをJSON形式で受け取る）
+  // より堅牢な正規表現：引用符で囲まれた文字列全体を取得
+  let processedContent = content.replace(
+    /<PurchaseLinks\s+links=(['"])([\s\S]*?)\1\s*\/>/g,
+    (match, quote, linksJson) => {
+      try {
+        // JSON文字列をBase64エンコードしてプレースホルダーに埋め込む
+        const encoded = Buffer.from(linksJson, 'utf8').toString('base64');
+        return `[PURCHASE_LINKS_PLACEHOLDER:${encoded}]`;
+      } catch (error) {
+        console.error('Error processing PurchaseLinks:', error);
+        return match;
+      }
+    }
+  );
+
+  // YouTubeコンポーネントを処理
+  const youtubePlaceholder = processedContent.replace(
     /<YouTube id="([^"]+)"\s*\/>/g,
     (match, id) => `[YOUTUBE_PLACEHOLDER:${id}]`
   );
@@ -39,6 +56,21 @@ async function processMarkdown(content: string): Promise<string> {
     .process(youtubePlaceholder);
 
   let html = String(processed);
+
+  // HTMLに変換された後も、PurchaseLinksプレースホルダーが残っている可能性があるため、再度処理
+  // （remarkがHTMLエンティティに変換した場合に対応）
+  html = html.replace(
+    /&lt;PurchaseLinks\s+links=(['"])([\s\S]*?)\1\s*\/&gt;/g,
+    (match, quote, linksJson) => {
+      try {
+        const encoded = Buffer.from(linksJson, 'utf8').toString('base64');
+        return `[PURCHASE_LINKS_PLACEHOLDER:${encoded}]`;
+      } catch (error) {
+        console.error('Error processing PurchaseLinks in HTML:', error);
+        return match;
+      }
+    }
+  );
 
   // 画像タグをプレースホルダーに置き換え（後でNext.js Imageコンポーネントに置き換える）
   // 属性の順序に関係なく、srcとaltを抽出（自己閉じタグにも対応）
