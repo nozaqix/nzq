@@ -8,7 +8,6 @@ interface PostFrontmatter {
   title: string;
   date: string;
   category: string;
-  slug: string;
   thumbnail?: string;
 }
 
