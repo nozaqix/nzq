@@ -14,7 +14,6 @@ export interface PostFrontmatter {
   title: string;
   date: string;
   category: string;
-  slug: string;
   thumbnail?: string;
 }
 
@@ -117,7 +116,6 @@ export function getAllPosts(): Post[] {
           title: data.title || '',
           date: data.date || '',
           category: data.category || '',
-          slug: data.slug || slug,
           thumbnail: data.thumbnail || undefined,
         },
         content,
@@ -161,7 +159,6 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       title: data.title || '',
       date: data.date || '',
       category: data.category || '',
-      slug: data.slug || slug,
       thumbnail: data.thumbnail || undefined,
     },
     content,
