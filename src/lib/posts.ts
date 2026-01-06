@@ -42,19 +42,51 @@ async function processMarkdown(content: string): Promise<string> {
     }
   );
 
+  // <br />タグをプレースホルダーに置き換え（remarkが削除するのを防ぐ）
+  // 連続する<br />タグを1つのプレースホルダーにまとめる
+  let brProcessed = processedContent;
+  let brPlaceholderIndex = 0;
+  brProcessed = brProcessed.replace(
+    /(<br\s*\/?>\s*)+/gi,
+    (match) => {
+      const brCount = (match.match(/<br\s*\/?>/gi) || []).length;
+      return `[BR_PLACEHOLDER:${brPlaceholderIndex++}:${brCount}]`;
+    }
+  );
+
   // YouTubeコンポーネントを処理
-  const youtubePlaceholder = processedContent.replace(
+  const youtubePlaceholder = brProcessed.replace(
     /<YouTube id="([^"]+)"\s*\/>/g,
     (match, id) => `[YOUTUBE_PLACEHOLDER:${id}]`
   );
+
+  // 空行2つのパターンを検出してプレースホルダーに置き換え（2段の改行用）
+  // 空行2つ（改行文字が3つ連続 = 空行2つ）を検出
+  // パターン: 任意の文字 + 改行 + 改行 + 改行 + 任意の文字
+  const doubleLineBreakProcessed = youtubePlaceholder.replace(/([^\n\r])\n\n\n([^\n\r])/g, '$1\n[DOUBLE_LINE_BREAK]\n$2');
 
   // MDXをMarkdownとして処理
   const processed = await remark()
     .use(remarkGfm)
     .use(remarkHtml, { allowDangerousHtml: true })
-    .process(youtubePlaceholder);
+    .process(doubleLineBreakProcessed);
 
   let html = String(processed);
+
+  // BRプレースホルダーを<br />タグに戻す
+  html = html.replace(
+    /\[BR_PLACEHOLDER:\d+:(\d+)\]/g,
+    (match, count) => {
+      const brCount = parseInt(count, 10);
+      return '<br />'.repeat(brCount);
+    }
+  );
+
+  // DOUBLE_LINE_BREAKプレースホルダーを空のdiv要素に変換（2段の改行用）
+  html = html.replace(
+    /\[DOUBLE_LINE_BREAK\]/g,
+    '<div style="height: 1.5rem; margin: 0; padding: 0;"></div>'
+  );
 
   // HTMLに変換された後も、PurchaseLinksプレースホルダーが残っている可能性があるため、再度処理
   // （remarkがHTMLエンティティに変換した場合に対応）
