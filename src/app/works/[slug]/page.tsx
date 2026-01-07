@@ -5,7 +5,7 @@ import { getPostBySlug, getAllSlugs } from '@/lib/posts';
 import YouTube from '@/components/mdx/YouTube';
 import PurchaseLinks from '@/components/mdx/PurchaseLinks';
 import SkeletonImage from '@/components/SkeletonImage';
-import ImagePreloader from '@/components/ImagePreloader';
+import BackgroundImagePreloader from '@/components/BackgroundImagePreloader';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import type { Metadata } from 'next';
@@ -178,68 +178,69 @@ export default async function PostPage({ params }: PageProps) {
   }
 
   return (
-    <ImagePreloader imageUrls={imageUrls}>
-      <div className="min-h-screen bg-[#111] text-white flex flex-col page-transition">
-        {/* Header */}
-        <Header />
+    <div className="min-h-screen bg-[#111] text-white flex flex-col page-transition">
+      {/* バックグラウンドで画像をプリロード（ローディング画面は表示しない） */}
+      <BackgroundImagePreloader imageUrls={imageUrls} />
 
-        {/* Main Container */}
-        <div className="flex flex-col items-start gap-[240px] w-full p-6 md:p-10 flex-1">
-          <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-16 w-full min-w-0">
-            {/* Left Column - Breadcrumb */}
-            <div className="w-full lg:w-[400px] flex-shrink-0 min-w-0">
-              <div>
-                <Link href="/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
-                  Home
-                </Link>
-                {post.frontmatter.category === 'Release' && (
-                  <>
-                    <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
-                      {'>'}
-                    </span>
-                    <Link href="/works/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
-                      Works
-                    </Link>
-                  </>
-                )}
-                <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
-                  {'>'}
-                </span>
-                <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter">
-                  {post.frontmatter.title}
-                </span>
-              </div>
+      {/* Header */}
+      <Header />
+
+      {/* Main Container */}
+      <div className="flex flex-col items-start gap-[240px] w-full p-6 md:p-10 flex-1">
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-16 w-full min-w-0">
+          {/* Left Column - Breadcrumb */}
+          <div className="w-full lg:w-[400px] flex-shrink-0 min-w-0">
+            <div>
+              <Link href="/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
+                Home
+              </Link>
+              {post.frontmatter.category === 'Release' && (
+                <>
+                  <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
+                    {'>'}
+                  </span>
+                  <Link href="/works/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
+                    Works
+                  </Link>
+                </>
+              )}
+              <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
+                {'>'}
+              </span>
+              <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter">
+                {post.frontmatter.title}
+              </span>
             </div>
+          </div>
 
-            {/* Right Column - Content */}
-            <div className="flex-1 w-full min-w-0 max-w-[1600px]">
-              <div className="space-y-6">
-                {/* Article Header */}
-                <div className="space-y-1.5">
-                  <div className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter">
-                    {formatDate(post.frontmatter.date)}
-                  </div>
-                  <div className="text-xs text-[#999999] font-normal leading-normal tracking-[0.6px] font-inter">
-                    [{post.frontmatter.category}]
-                  </div>
-                  <h1 className="text-xl text-white font-bold leading-normal tracking-[2px] font-din-next">
-                    {post.frontmatter.title}
-                  </h1>
+          {/* Right Column - Content */}
+          <div className="flex-1 w-full min-w-0 max-w-[1600px]">
+            <div className="space-y-6">
+              {/* Article Header */}
+              <div className="space-y-1.5">
+                <div className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter">
+                  {formatDate(post.frontmatter.date)}
                 </div>
+                <div className="text-xs text-[#999999] font-normal leading-normal tracking-[0.6px] font-inter">
+                  [{post.frontmatter.category}]
+                </div>
+                <h1 className="text-xl text-white font-bold leading-normal tracking-[2px] font-din-next">
+                  {post.frontmatter.title}
+                </h1>
+              </div>
 
-                {/* Article Content */}
-                <div>
-                  {processHtmlContent(post.htmlContent)}
-                </div>
+              {/* Article Content */}
+              <div>
+                {processHtmlContent(post.htmlContent)}
               </div>
             </div>
           </div>
         </div>
-
-        {/* Footer */}
-        <Footer />
       </div>
-    </ImagePreloader>
+
+      {/* Footer */}
+      <Footer />
+    </div>
   );
 }
 
