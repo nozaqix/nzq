@@ -3,8 +3,8 @@ import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NZQ - Architecting and creating beautiful things",
-  description: "Portfolio site for composer and designer",
+  title: "NZQ",
+  description: "コンポーザーnozaqiのポートフォリオwebサイトです。作品紹介や技術実験、思考のアウトプットなどを載せています。楽曲制作のご依頼はContactからお送りください。",
 };
 
 export default function RootLayout({
