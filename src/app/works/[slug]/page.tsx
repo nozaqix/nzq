@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { getPostBySlug, getAllSlugs } from '@/lib/posts';
 import YouTube from '@/components/mdx/YouTube';
 import PurchaseLinks from '@/components/mdx/PurchaseLinks';
-import Image from 'next/image';
+import SkeletonImage from '@/components/SkeletonImage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import type { Metadata } from 'next';
@@ -81,7 +81,7 @@ function processHtmlContent(html: string): React.ReactNode {
       const placeholder = `__COMPONENT_${componentIndex}__`;
       parts.push(
         <div key={placeholder} className="my-6">
-          <Image
+          <SkeletonImage
             src={src}
             alt={alt || ''}
             width={800}
