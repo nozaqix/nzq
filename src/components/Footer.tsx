@@ -42,6 +42,14 @@ export default function Footer() {
         >
           BOOTH
         </a>
+        <a
+          href="https://github.com/nozaqix"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-gray-300 transition-colors"
+        >
+          GitHub
+        </a>
       </div>
     </footer>
   );
