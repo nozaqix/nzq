@@ -7,6 +7,8 @@ interface ImagePreloaderProps {
   children: React.ReactNode;
 }
 
+const IMAGE_LOAD_TIMEOUT = 5000; // 5秒のタイムアウト
+
 export default function ImagePreloader({ imageUrls, children }: ImagePreloaderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [loadedCount, setLoadedCount] = useState(0);
@@ -33,19 +35,39 @@ export default function ImagePreloader({ imageUrls, children }: ImagePreloaderPr
     const loadImage = (url: string): Promise<void> => {
       return new Promise((resolve) => {
         const img = new Image();
+        let isResolved = false;
+        
+        // タイムアウトを設定
+        const timeoutId = setTimeout(() => {
+          if (!isResolved) {
+            isResolved = true;
+            errored++;
+            setLoadedCount(loaded + errored);
+            resolve();
+            checkComplete();
+          }
+        }, IMAGE_LOAD_TIMEOUT);
         
         img.onload = () => {
-          loaded++;
-          setLoadedCount(loaded);
-          resolve();
-          checkComplete();
+          if (!isResolved) {
+            isResolved = true;
+            clearTimeout(timeoutId);
+            loaded++;
+            setLoadedCount(loaded);
+            resolve();
+            checkComplete();
+          }
         };
         
         img.onerror = () => {
-          errored++;
-          setLoadedCount(loaded + errored);
-          resolve();
-          checkComplete();
+          if (!isResolved) {
+            isResolved = true;
+            clearTimeout(timeoutId);
+            errored++;
+            setLoadedCount(loaded + errored);
+            resolve();
+            checkComplete();
+          }
         };
         
         img.src = url;
