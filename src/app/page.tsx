@@ -4,7 +4,6 @@ import SubHeader from '@/components/SubHeader';
 import Footer from '@/components/Footer';
 import PostsList from '@/components/PostsList';
 import ImagePreloader from '@/components/ImagePreloader';
-import SkeletonTest from '@/components/SkeletonTest';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -36,11 +35,6 @@ export default async function Home() {
         {/* SubHeader */}
         <div className="w-full p-6 md:p-10">
           <SubHeader />
-        </div>
-
-        {/* スケルトンスクリーン確認用 */}
-        <div className="w-full p-6 md:p-10">
-          <SkeletonTest />
         </div>
 
         {/* Main Container - Figma Auto Layout */}
