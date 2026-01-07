@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import SkeletonImage from '@/components/SkeletonImage';
 import { getPostBySlug } from '@/lib/posts';
 import type { Metadata } from 'next';
 
@@ -29,10 +30,13 @@ function processHtmlContent(html: string): React.ReactNode {
       const placeholder = `__COMPONENT_${componentIndex}__`;
       parts.push(
         <div key={placeholder} className="my-6">
-          <img
+          <SkeletonImage
             src={src}
             alt={alt}
-            className="w-full h-auto rounded-lg"
+            width={800}
+            height={600}
+            className="w-full h-auto"
+            unoptimized
           />
         </div>
       );

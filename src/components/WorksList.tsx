@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import SkeletonImage from '@/components/SkeletonImage';
 
 interface PostFrontmatter {
   title: string;
@@ -69,24 +69,24 @@ export default function WorksList({ posts }: WorksListProps) {
 
       {/* Right Side - Illustration */}
       <div className="hidden lg:block lg:sticky lg:top-0 lg:self-start flex-shrink min-w-0 w-full max-w-[980px]">
-        <div className="w-full aspect-video bg-gray-800/60 overflow-hidden flex items-center justify-center relative">
-          {currentThumbnail ? (
-            <Image
-              src={currentThumbnail}
-              alt="Article Thumbnail"
-              width={980}
-              height={551}
-              className="w-full h-full object-cover brightness-110 transition-opacity duration-300"
-              unoptimized
-            />
-          ) : (
+        {currentThumbnail ? (
+          <SkeletonImage
+            src={currentThumbnail}
+            alt="Article Thumbnail"
+            width={980}
+            height={551}
+            className="w-full aspect-video"
+            unoptimized
+          />
+        ) : (
+          <div className="w-full aspect-video flex items-center justify-center" style={{ backgroundColor: 'rgb(120 120 120 / 0.4)' }}>
             <div className="text-center">
               <p className="text-gray-500 text-xs mb-1">Illustration Placeholder</p>
               <p className="text-gray-600 text-xs">画像を配置する場合は</p>
               <p className="text-gray-600 text-xs">/public/images/main-visual.jpg に配置</p>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

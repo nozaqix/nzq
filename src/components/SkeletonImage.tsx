@@ -27,20 +27,26 @@ export default function SkeletonImage({
     <div className={`relative ${className}`}>
       {/* スケルトンスクリーン */}
       {isLoading && (
-        <div className="w-full bg-gray-800/60 rounded-lg overflow-hidden" style={{ aspectRatio: `${width} / ${height}`, minHeight: '200px' }}>
-          <div className="w-full h-full bg-gradient-to-r from-gray-800/40 via-gray-700/40 to-gray-800/40 bg-[length:200%_100%] animate-shimmer"></div>
+        <div className="w-full overflow-hidden" style={{ aspectRatio: `${width} / ${height}`, minHeight: '200px', backgroundColor: 'rgb(120 120 120 / 0.4)' }}>
+          <div 
+            className="w-full h-full animate-shimmer" 
+            style={{ 
+              background: 'linear-gradient(to right, rgb(120 120 120 / 0.3), rgb(120 120 120 / 0.5), rgb(120 120 120 / 0.3))',
+              backgroundSize: '200% 100%'
+            }}
+          ></div>
         </div>
       )}
 
       {/* 画像 */}
       {!hasError && (
-        <div className={isLoading ? 'absolute inset-0 opacity-0' : 'opacity-100 transition-opacity duration-300'}>
+        <div className={isLoading ? 'absolute inset-0 opacity-0' : 'opacity-100 transition-opacity duration-300 w-full h-full'}>
           <Image
             src={src}
             alt={alt}
             width={width}
             height={height}
-            className="w-full h-auto"
+            className={`w-full h-full ${className.includes('aspect-video') ? 'object-cover brightness-110' : 'h-auto'}`}
             unoptimized={unoptimized}
             onLoad={() => setIsLoading(false)}
             onError={() => {
@@ -53,7 +59,7 @@ export default function SkeletonImage({
 
       {/* エラー時の表示 */}
       {hasError && (
-        <div className="w-full bg-gray-800/60 rounded-lg flex items-center justify-center p-8" style={{ minHeight: '200px' }}>
+        <div className="w-full flex items-center justify-center p-8" style={{ minHeight: '200px', backgroundColor: 'rgb(120 120 120 / 0.4)' }}>
           <p className="text-gray-500 text-xs">画像の読み込みに失敗しました</p>
         </div>
       )}
