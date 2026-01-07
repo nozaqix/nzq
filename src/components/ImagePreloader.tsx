@@ -79,20 +79,20 @@ export default function ImagePreloader({ imageUrls, children }: ImagePreloaderPr
   }, [imageUrls]);
 
   if (isLoading) {
-    const progress = totalCount > 0 ? (loadedCount / totalCount) * 100 : 0;
-
     return (
       <div className="fixed inset-0 bg-[#111] flex items-center justify-center z-50">
-        <div className="text-center">
-          <p className="text-white text-xs font-inter mb-4">
+        <div className="flex flex-col items-center">
+          {/* メインの光る輪 */}
+          <div className="loading-ring">
+            <div className="ring-layer ring-layer-1"></div>
+            <div className="ring-layer ring-layer-2"></div>
+            <div className="ring-layer ring-layer-3"></div>
+          </div>
+          
+          {/* テキスト */}
+          <p className="text-white text-xs font-inter mt-8 text-center">
             Now Loading...
           </p>
-          <div className="w-64 h-1 bg-gray-700 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-white transition-all duration-300 ease-out"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
         </div>
       </div>
     );
