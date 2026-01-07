@@ -5,6 +5,7 @@ import { getPostBySlug, getAllSlugs } from '@/lib/posts';
 import YouTube from '@/components/mdx/YouTube';
 import PurchaseLinks from '@/components/mdx/PurchaseLinks';
 import SkeletonImage from '@/components/SkeletonImage';
+import ImagePreloader from '@/components/ImagePreloader';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import type { Metadata } from 'next';
@@ -31,11 +32,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+// HTMLコンテンツから画像URLを抽出する関数
+function extractImageUrls(html: string): string[] {
+  const imageUrls: string[] = [];
+  const matches = html.matchAll(/\[IMAGE_PLACEHOLDER:([^\]]+)\]/g);
+  for (const match of matches) {
+    const content = match[1];
+    const lastColonIndex = content.lastIndexOf(':');
+    const src = lastColonIndex !== -1 ? content.substring(0, lastColonIndex) : content;
+    if (src && !imageUrls.includes(src)) {
+      imageUrls.push(src);
+    }
+  }
+  return imageUrls;
+}
+
 // HTMLコンテンツを処理し、プレースホルダーをコンポーネントに置き換える関数
 function processHtmlContent(html: string): React.ReactNode {
   const parts: React.ReactNode[] = [];
   let processedHtml = html;
   let componentIndex = 0;
+  let imageIndex = 0;
 
   // PurchaseLinksプレースホルダーを処理
   processedHtml = processedHtml.replace(
@@ -79,6 +96,8 @@ function processHtmlContent(html: string): React.ReactNode {
       const src = lastColonIndex !== -1 ? content.substring(0, lastColonIndex) : content;
       const alt = lastColonIndex !== -1 ? content.substring(lastColonIndex + 1) : '';
       const placeholder = `__COMPONENT_${componentIndex}__`;
+      const currentImageIndex = imageIndex++;
+      const isPriority = currentImageIndex === 0;
       parts.push(
         <div key={placeholder} className="my-6">
           <SkeletonImage
@@ -88,6 +107,7 @@ function processHtmlContent(html: string): React.ReactNode {
             height={600}
             className="w-full h-auto"
             unoptimized
+            priority={isPriority}
           />
         </div>
       );
@@ -150,67 +170,76 @@ export default async function PostPage({ params }: PageProps) {
     notFound();
   }
 
+  // 記事内の画像URLを抽出
+  const imageUrls = extractImageUrls(post.htmlContent);
+  // サムネイルも追加
+  if (post.frontmatter.thumbnail && !imageUrls.includes(post.frontmatter.thumbnail)) {
+    imageUrls.unshift(post.frontmatter.thumbnail);
+  }
+
   return (
-    <div className="min-h-screen bg-[#111] text-white flex flex-col page-transition">
-      {/* Header */}
-      <Header />
+    <ImagePreloader imageUrls={imageUrls}>
+      <div className="min-h-screen bg-[#111] text-white flex flex-col page-transition">
+        {/* Header */}
+        <Header />
 
-      {/* Main Container */}
-      <div className="flex flex-col items-start gap-[240px] w-full p-6 md:p-10 flex-1">
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-16 w-full min-w-0">
-          {/* Left Column - Breadcrumb */}
-          <div className="w-full lg:w-[400px] flex-shrink-0 min-w-0">
-            <div>
-              <Link href="/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
-                Home
-              </Link>
-              {post.frontmatter.category === 'Release' && (
-                <>
-                  <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
-                    {'>'}
-                  </span>
-                  <Link href="/works/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
-                    Works
-                  </Link>
-                </>
-              )}
-              <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
-                {'>'}
-              </span>
-              <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter">
-                {post.frontmatter.title}
-              </span>
-            </div>
-          </div>
-
-          {/* Right Column - Content */}
-          <div className="flex-1 w-full min-w-0 max-w-[1600px]">
-            <div className="space-y-6">
-              {/* Article Header */}
-              <div className="space-y-1.5">
-                <div className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter">
-                  {formatDate(post.frontmatter.date)}
-                </div>
-                <div className="text-xs text-[#999999] font-normal leading-normal tracking-[0.6px] font-inter">
-                  [{post.frontmatter.category}]
-                </div>
-                <h1 className="text-xl text-white font-bold leading-normal tracking-[2px] font-din-next">
-                  {post.frontmatter.title}
-                </h1>
-              </div>
-
-              {/* Article Content */}
+        {/* Main Container */}
+        <div className="flex flex-col items-start gap-[240px] w-full p-6 md:p-10 flex-1">
+          <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-16 w-full min-w-0">
+            {/* Left Column - Breadcrumb */}
+            <div className="w-full lg:w-[400px] flex-shrink-0 min-w-0">
               <div>
-                {processHtmlContent(post.htmlContent)}
+                <Link href="/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
+                  Home
+                </Link>
+                {post.frontmatter.category === 'Release' && (
+                  <>
+                    <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
+                      {'>'}
+                    </span>
+                    <Link href="/works/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
+                      Works
+                    </Link>
+                  </>
+                )}
+                <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
+                  {'>'}
+                </span>
+                <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter">
+                  {post.frontmatter.title}
+                </span>
+              </div>
+            </div>
+
+            {/* Right Column - Content */}
+            <div className="flex-1 w-full min-w-0 max-w-[1600px]">
+              <div className="space-y-6">
+                {/* Article Header */}
+                <div className="space-y-1.5">
+                  <div className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter">
+                    {formatDate(post.frontmatter.date)}
+                  </div>
+                  <div className="text-xs text-[#999999] font-normal leading-normal tracking-[0.6px] font-inter">
+                    [{post.frontmatter.category}]
+                  </div>
+                  <h1 className="text-xl text-white font-bold leading-normal tracking-[2px] font-din-next">
+                    {post.frontmatter.title}
+                  </h1>
+                </div>
+
+                {/* Article Content */}
+                <div>
+                  {processHtmlContent(post.htmlContent)}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Footer */}
-      <Footer />
-    </div>
+        {/* Footer */}
+        <Footer />
+      </div>
+    </ImagePreloader>
   );
 }
 

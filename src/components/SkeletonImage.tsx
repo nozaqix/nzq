@@ -10,6 +10,7 @@ interface SkeletonImageProps {
   height?: number;
   className?: string;
   unoptimized?: boolean;
+  priority?: boolean;
 }
 
 export default function SkeletonImage({
@@ -19,6 +20,7 @@ export default function SkeletonImage({
   height = 600,
   className = '',
   unoptimized = false,
+  priority = false,
 }: SkeletonImageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -48,6 +50,8 @@ export default function SkeletonImage({
             height={height}
             className={`w-full h-full ${className.includes('aspect-video') ? 'object-cover brightness-110' : 'h-auto'}`}
             unoptimized={unoptimized}
+            priority={priority}
+            fetchPriority={priority ? 'high' : 'auto'}
             onLoad={() => setIsLoading(false)}
             onError={() => {
               setIsLoading(false);
