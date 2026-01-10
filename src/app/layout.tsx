@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "NZQ",
-  description: "コンポーザーnozaqiのポートフォリオwebサイトです。作品紹介や技術実験、思考のアウトプットなどを載せています。楽曲制作のご依頼はContactからお送りください。",
+  description: "コンポーザーnozaqiのポートフォリオwebサイトです。作品紹介や技術実験、思考のアウトプットなどを載せています。",
 };
 
 export default function RootLayout({

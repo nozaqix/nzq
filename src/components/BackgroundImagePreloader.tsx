@@ -22,3 +22,4 @@ export default function BackgroundImagePreloader({ imageUrls }: BackgroundImageP
   return null; // 何も表示しない
 }
 
+

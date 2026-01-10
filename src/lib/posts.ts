@@ -135,7 +135,7 @@ export function getAllPosts(): Post[] {
 
   const fileNames = fs.readdirSync(postsDirectory);
   const allPostsData = fileNames
-    .filter((fileName) => fileName.endsWith('.mdx') && fileName !== 'contact.mdx')
+    .filter((fileName) => fileName.endsWith('.mdx'))
     .map((fileName) => {
       const slug = fileName.replace(/\.mdx$/, '');
       const fullPath = path.join(postsDirectory, fileName);
@@ -215,7 +215,7 @@ export function getAllSlugs(): string[] {
 
   const fileNames = fs.readdirSync(postsDirectory);
   return fileNames
-    .filter((fileName) => fileName.endsWith('.mdx') && fileName !== 'contact.mdx')
+    .filter((fileName) => fileName.endsWith('.mdx'))
     .map((fileName) => fileName.replace(/\.mdx$/, ''));
   } catch (error) {
     console.error('Error reading slugs:', error);
