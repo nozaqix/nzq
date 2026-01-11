@@ -7,23 +7,9 @@ export default function SubHeader() {
         <span>{'nozaqi'}</span>
       </div>
       <div>
-        <span>Role</span>
+        <span>About</span>
         <span>{' : '}</span>
-        <span>{'Composer'}</span>
-      </div>
-      <div>
-        <span>Works</span>
-        <span>{' : '}</span>
-        <span>
-          {'Compose | Arrangement | Lyric | Mix | Mastering'}
-        </span>
-      </div>
-      <div>
-        <span>Skills</span>
-        <span>{' : '}</span>
-        <span>
-          {'Compose | Graphic Design | Interface Design | Visual Architect | Development | etc...'}
-        </span>
+        <span>{"I'm Nobody"}</span>
       </div>
     </div>
   );
