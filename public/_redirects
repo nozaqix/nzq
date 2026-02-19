@@ -1,0 +1,14 @@
+# Cloudflare Pages redirects file
+# Redirect all requests from nzq.pages.dev to nozaqi.work
+# Format: source destination status_code
+
+# Redirect all paths from old domain to new domain
+https://nzq.pages.dev/* https://nozaqi.work/:splat 301
+http://nzq.pages.dev/* https://nozaqi.work/:splat 301
+
+
+
+
+
+
+
