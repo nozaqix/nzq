@@ -11,11 +11,4 @@ nozaqiのポートフォリオサイトです。
 
 ## デプロイ
 
-GitHub Actions で `main` に push すると自動的に Cloudflare Pages にデプロイされる。
-
-### GitHub Secrets
-
-| Secret | 内容 |
-|---|---|
-| `CLOUDFLARE_API_TOKEN` | Cloudflare API Token (Edit Workers) |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare Account ID |
+Cloudflare Pages Git連携により `main` に push すると自動デプロイされる。PRにはプレビューURLが自動生成される。
