@@ -18,7 +18,7 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  const slugs = getAllSlugs('works');
+  const slugs = getAllSlugs('develop');
   return slugs.map(({ slug }) => ({
     slug,
   }));
@@ -26,7 +26,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(slug, 'works');
+  const post = await getPostBySlug(slug, 'develop');
 
   if (!post) {
     return {};
@@ -35,12 +35,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: post.frontmatter.title,
     alternates: {
-      canonical: `https://nozaqi.work/works/${slug}/`,
+      canonical: `https://nozaqi.work/develop/${slug}/`,
     },
     openGraph: {
       title: post.frontmatter.title,
       type: 'article',
-      url: `https://nozaqi.work/works/${slug}/`,
+      url: `https://nozaqi.work/develop/${slug}/`,
       ...(post.frontmatter.thumbnail && {
         images: [{ url: post.frontmatter.thumbnail }],
       }),
@@ -192,9 +192,9 @@ const formatDate = (dateString: string): string => {
   return `${year}.${month}.${day}`;
 };
 
-export default async function PostPage({ params }: PageProps) {
+export default async function DevelopPostPage({ params }: PageProps) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug, 'works');
+  const post = await getPostBySlug(slug, 'develop');
 
   if (!post || !post.htmlContent) {
     notFound();
@@ -209,13 +209,10 @@ export default async function PostPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-[#111] text-white flex flex-col page-transition">
-      {/* バックグラウンドで画像をプリロード（ローディング画面は表示しない） */}
       <BackgroundImagePreloader imageUrls={imageUrls} />
 
-      {/* Header */}
       <Header />
 
-      {/* Main Container */}
       <div className="flex flex-col items-start gap-[240px] w-full p-6 md:p-10 flex-1">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-16 w-full min-w-0">
           {/* Left Column - Breadcrumb */}
@@ -224,16 +221,12 @@ export default async function PostPage({ params }: PageProps) {
               <Link href="/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
                 Home
               </Link>
-              {post.frontmatter.category === 'Release' && (
-                <>
-                  <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
-                    {'>'}
-                  </span>
-                  <Link href="/works/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
-                    Works
-                  </Link>
-                </>
-              )}
+              <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
+                {'>'}
+              </span>
+              <Link href="/develop/" className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter hover:opacity-70 transition-opacity">
+                Develop
+              </Link>
               <span className="text-xs text-[#B8B9BA] font-normal leading-normal tracking-[0.6px] font-inter mx-2">
                 {'>'}
               </span>
@@ -268,9 +261,7 @@ export default async function PostPage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
 }
-

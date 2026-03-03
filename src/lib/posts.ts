@@ -5,10 +5,15 @@ import { remark } from 'remark';
 import remarkHtml from 'remark-html';
 import remarkGfm from 'remark-gfm';
 
-// Cloudflare Pages環境での互換性のため、ビルド時のみfsを使用
-const postsDirectory = typeof process !== 'undefined' && process.cwd 
-  ? path.join(process.cwd(), 'src/content/works')
-  : 'src/content/works';
+export type ContentSection = 'works' | 'develop';
+
+const CONTENT_SECTIONS: ContentSection[] = ['works', 'develop'];
+
+function getPostsDirectory(section: ContentSection): string {
+  return typeof process !== 'undefined' && process.cwd
+    ? path.join(process.cwd(), `src/content/${section}`)
+    : `src/content/${section}`;
+}
 
 export interface PostFrontmatter {
   title: string;
@@ -19,6 +24,7 @@ export interface PostFrontmatter {
 
 export interface Post {
   slug: string;
+  section: ContentSection;
   frontmatter: PostFrontmatter;
   content: string;
   htmlContent?: string;
@@ -60,10 +66,16 @@ async function processMarkdown(content: string): Promise<string> {
     (match, id) => `[YOUTUBE_PLACEHOLDER:${id}]`
   );
 
+  // WebGPUDemoコンポーネントを処理
+  const webgpuPlaceholder = youtubePlaceholder.replace(
+    /<WebGPUDemo src="([^"]+)"\s*\/>/g,
+    (match, src) => `[WEBGPU_PLACEHOLDER:${src}]`
+  );
+
   // 空行2つのパターンを検出してプレースホルダーに置き換え（2段の改行用）
   // 空行2つ（改行文字が3つ連続 = 空行2つ）を検出
   // パターン: 任意の文字 + 改行 + 改行 + 改行 + 任意の文字
-  const doubleLineBreakProcessed = youtubePlaceholder.replace(/([^\n\r])\n\n\n([^\n\r])/g, '$1\n[DOUBLE_LINE_BREAK]\n$2');
+  const doubleLineBreakProcessed = webgpuPlaceholder.replace(/([^\n\r])\n\n\n([^\n\r])/g, '$1\n[DOUBLE_LINE_BREAK]\n$2');
 
   // MDXをMarkdownとして処理
   const processed = await remark()
@@ -122,19 +134,15 @@ async function processMarkdown(content: string): Promise<string> {
   return html;
 }
 
-export function getAllPosts(): Post[] {
-  // ビルド時のみfsを使用（Cloudflare Pages互換性のため）
-  if (typeof window !== 'undefined') {
-    return [];
-  }
+function getPostsFromSection(section: ContentSection): Post[] {
+  const postsDirectory = getPostsDirectory(section);
 
-  try {
   if (!fs.existsSync(postsDirectory)) {
     return [];
   }
 
   const fileNames = fs.readdirSync(postsDirectory);
-  const allPostsData = fileNames
+  return fileNames
     .filter((fileName) => fileName.endsWith('.mdx'))
     .map((fileName) => {
       const slug = fileName.replace(/\.mdx$/, '');
@@ -144,6 +152,7 @@ export function getAllPosts(): Post[] {
 
       return {
         slug,
+        section,
         frontmatter: {
           title: data.title || '',
           date: data.date || '',
@@ -153,73 +162,92 @@ export function getAllPosts(): Post[] {
         content,
       } as Post;
     });
+}
 
-  // 日付の降順でソート
-  return allPostsData.sort((a, b) => {
-    const dateA = new Date(a.frontmatter.date).getTime();
-    const dateB = new Date(b.frontmatter.date).getTime();
-    return dateB - dateA;
-  });
+export function getAllPosts(section?: ContentSection): Post[] {
+  // ビルド時のみfsを使用（Cloudflare Pages互換性のため）
+  if (typeof window !== 'undefined') {
+    return [];
+  }
+
+  try {
+    const posts = section
+      ? getPostsFromSection(section)
+      : CONTENT_SECTIONS.flatMap((s) => getPostsFromSection(s));
+
+    // 日付の降順でソート
+    return posts.sort((a, b) => {
+      const dateA = new Date(a.frontmatter.date).getTime();
+      const dateB = new Date(b.frontmatter.date).getTime();
+      return dateB - dateA;
+    });
   } catch (error) {
     console.error('Error reading posts:', error);
     return [];
   }
 }
 
-export async function getPostBySlug(slug: string): Promise<Post | null> {
+export async function getPostBySlug(slug: string, section: ContentSection): Promise<Post | null> {
   // ビルド時のみfsを使用（Cloudflare Pages互換性のため）
   if (typeof window !== 'undefined') {
     return null;
   }
 
   try {
-  const fullPath = path.join(postsDirectory, `${slug}.mdx`);
-  
-  if (!fs.existsSync(fullPath)) {
-    return null;
-  }
+    const postsDirectory = getPostsDirectory(section);
+    const fullPath = path.join(postsDirectory, `${slug}.mdx`);
 
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
+    if (!fs.existsSync(fullPath)) {
+      return null;
+    }
 
-  // MDXをHTMLに変換
-  const htmlContent = await processMarkdown(content);
+    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const { data, content } = matter(fileContents);
 
-  return {
-    slug,
-    frontmatter: {
-      title: data.title || '',
-      date: data.date || '',
-      category: data.category || '',
-      thumbnail: data.thumbnail || undefined,
-    },
-    content,
-    htmlContent,
-  } as Post;
+    // MDXをHTMLに変換
+    const htmlContent = await processMarkdown(content);
+
+    return {
+      slug,
+      section,
+      frontmatter: {
+        title: data.title || '',
+        date: data.date || '',
+        category: data.category || '',
+        thumbnail: data.thumbnail || undefined,
+      },
+      content,
+      htmlContent,
+    } as Post;
   } catch (error) {
     console.error(`Error reading post ${slug}:`, error);
     return null;
   }
 }
 
-export function getAllSlugs(): string[] {
+export function getAllSlugs(section?: ContentSection): { slug: string; section: ContentSection }[] {
   // ビルド時のみfsを使用（Cloudflare Pages互換性のため）
   if (typeof window !== 'undefined') {
     return [];
   }
 
   try {
-  if (!fs.existsSync(postsDirectory)) {
-    return [];
-  }
-
-  const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames
-    .filter((fileName) => fileName.endsWith('.mdx'))
-    .map((fileName) => fileName.replace(/\.mdx$/, ''));
+    const sections = section ? [section] : CONTENT_SECTIONS;
+    return sections.flatMap((s) => {
+      const postsDirectory = getPostsDirectory(s);
+      if (!fs.existsSync(postsDirectory)) {
+        return [];
+      }
+      const fileNames = fs.readdirSync(postsDirectory);
+      return fileNames
+        .filter((fileName) => fileName.endsWith('.mdx'))
+        .map((fileName) => ({
+          slug: fileName.replace(/\.mdx$/, ''),
+          section: s,
+        }));
+    });
   } catch (error) {
     console.error('Error reading slugs:', error);
     return [];
   }
 }
-
