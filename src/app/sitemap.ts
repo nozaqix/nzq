@@ -18,12 +18,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/develop/`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
   ];
 
-  // 動的ページ（ワークス）
+  // 動的ページ（全セクション）
   const allPosts = getAllPosts();
   const dynamicPages: MetadataRoute.Sitemap = allPosts.map((post) => ({
-    url: `${baseUrl}/works/${post.slug}/`,
+    url: `${baseUrl}/${post.section}/${post.slug}/`,
     lastModified: new Date(post.frontmatter.date),
     changeFrequency: 'monthly' as const,
     priority: 0.7,
@@ -31,4 +37,3 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [...staticPages, ...dynamicPages];
 }
-

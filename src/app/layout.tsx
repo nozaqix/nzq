@@ -2,9 +2,24 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 
+const DEFAULT_OG_IMAGE = 'https://assets.nozaqi.work/nzq/portfolio/images/nzq.png';
+
 export const metadata: Metadata = {
   title: "NZQ",
-  description: "コンポーザーnozaqiのポートフォリオwebサイトです。作品紹介や技術実験、思考のアウトプットなどを載せています。",
+  description: "nozaqiのポートフォリオサイト。MV・ライブ映像制作の作品紹介や技術実験を掲載。",
+  openGraph: {
+    title: "NZQ",
+    description: "nozaqiのポートフォリオサイト。MV・ライブ映像制作の作品紹介や技術実験を掲載。",
+    url: "https://nozaqi.work",
+    siteName: "NZQ",
+    type: "website",
+    locale: "ja_JP",
+    images: [{ url: DEFAULT_OG_IMAGE }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@nozaqix",
+  },
 };
 
 export default function RootLayout({

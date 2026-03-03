@@ -13,6 +13,7 @@ interface PostFrontmatter {
 
 interface Post {
   slug: string;
+  section?: string;
   frontmatter: PostFrontmatter;
 }
 
@@ -44,7 +45,7 @@ export default function PostsList({ posts }: PostsListProps) {
           {posts.map((post) => (
             <Link
               key={post.slug}
-              href={`/works/${post.slug}/`}
+              href={`/${post.section || 'works'}/${post.slug}/`}
               className="block hover:opacity-70 transition-opacity"
               onMouseEnter={() => {
                 setHoveredThumbnail(post.frontmatter.thumbnail || null);

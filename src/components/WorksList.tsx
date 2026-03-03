@@ -18,9 +18,10 @@ interface Post {
 
 interface WorksListProps {
   posts: Post[];
+  basePath?: string;
 }
 
-export default function WorksList({ posts }: WorksListProps) {
+export default function WorksList({ posts, basePath = '/works' }: WorksListProps) {
   const [hoveredThumbnail, setHoveredThumbnail] = useState<string | null>(null);
 
   const formatDate = (dateString: string): string => {
@@ -44,7 +45,7 @@ export default function WorksList({ posts }: WorksListProps) {
           {posts.map((post) => (
             <Link
               key={post.slug}
-              href={`/works/${post.slug}/`}
+              href={`${basePath}/${post.slug}/`}
               className="block hover:opacity-70 transition-opacity"
               onMouseEnter={() => {
                 setHoveredThumbnail(post.frontmatter.thumbnail || null);
