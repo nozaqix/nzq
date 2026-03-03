@@ -66,10 +66,13 @@ async function processMarkdown(content: string): Promise<string> {
     (match, id) => `[YOUTUBE_PLACEHOLDER:${id}]`
   );
 
-  // WebGPUDemoコンポーネントを処理
+  // WebGPUDemoコンポーネントを処理（URLをBase64エンコードしてremark-gfmの自動リンク変換を防ぐ）
   const webgpuPlaceholder = youtubePlaceholder.replace(
     /<WebGPUDemo src="([^"]+)"\s*\/>/g,
-    (match, src) => `[WEBGPU_PLACEHOLDER:${src}]`
+    (match, src) => {
+      const encoded = Buffer.from(src, 'utf8').toString('base64');
+      return `[WEBGPU_PLACEHOLDER:${encoded}]`;
+    }
   );
 
   // 空行2つのパターンを検出してプレースホルダーに置き換え（2段の改行用）
