@@ -106,10 +106,11 @@ function processHtmlContent(html: string): React.ReactNode {
     }
   );
 
-  // WebGPUDemoプレースホルダーを処理
+  // WebGPUDemoプレースホルダーを処理（Base64デコード）
   processedHtml = processedHtml.replace(
     /\[WEBGPU_PLACEHOLDER:([^\]]+)\]/g,
-    (match, src) => {
+    (match, encoded) => {
+      const src = Buffer.from(encoded, 'base64').toString('utf8');
       const placeholder = `__COMPONENT_${componentIndex}__`;
       parts.push(<WebGPUDemo key={placeholder} src={src} />);
       componentIndex++;
