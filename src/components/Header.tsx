@@ -18,12 +18,6 @@ export default function Header() {
           >
             Works
           </Link>
-          <Link
-            href="/develop/"
-            className="text-gray-300 hover:text-white transition-colors"
-          >
-            Develop
-          </Link>
         </nav>
 
         {/* Logo below navigation */}
