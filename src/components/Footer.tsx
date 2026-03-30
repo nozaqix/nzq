@@ -34,22 +34,6 @@ export default function Footer() {
         >
           SoundCloud
         </a>
-        <a
-          href="https://nozaqi.booth.pm/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-gray-300 transition-colors"
-        >
-          BOOTH
-        </a>
-        <a
-          href="https://github.com/nozaqix"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-gray-300 transition-colors"
-        >
-          GitHub
-        </a>
       </div>
     </footer>
   );
