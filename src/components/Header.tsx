@@ -18,20 +18,26 @@ export default function Header() {
           >
             Works
           </Link>
+          <Link
+            href="/release/"
+            className="text-gray-300 hover:text-white transition-colors"
+          >
+            Release
+          </Link>
         </nav>
 
         {/* Logo below navigation */}
         <div>
           <Link href="/">
-            <h1 className="text-xl text-white font-bold leading-normal tracking-[2px] font-din-next hover:opacity-70 transition-opacity cursor-pointer">
-              NZQ
+            <h1 className="text-xl text-white font-bold leading-normal tracking-[1px] font-din-next hover:opacity-70 transition-opacity cursor-pointer">
+              nozaqi
             </h1>
           </Link>
         </div>
       </div>
-      <p className="text-sm text-white font-normal leading-normal tracking-[0.42px] font-din-next pl-6 pr-0 md:px-10">
+      {/* <p className="text-sm text-white font-normal leading-normal tracking-[0.42px] font-din-next pl-6 pr-0 md:px-10">
         Architecting and creating beautiful things
-      </p>
+      </p> */}
     </header>
   );
 }

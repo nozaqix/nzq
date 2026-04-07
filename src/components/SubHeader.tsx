@@ -9,7 +9,7 @@ export default function SubHeader() {
       <div>
         <span>About</span>
         <span>{' : '}</span>
-        <span>{"I'm Nobody"}</span>
+        <span>{"This is the portfolio site of nozaqi, who works as a composer."}</span>
       </div>
     </div>
   );
