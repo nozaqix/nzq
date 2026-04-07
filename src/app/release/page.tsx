@@ -6,13 +6,13 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: 'https://nozaqi.work/works/',
+    canonical: 'https://nozaqi.work/release/',
   },
 };
 
-export default async function WorksPage() {
+export default async function ReleasePage() {
   const allPosts = getAllPosts('works');
-  const worksPosts = allPosts.filter((post) => post.frontmatter.category === 'Works');
+  const releasePosts = allPosts.filter((post) => post.frontmatter.category === 'Release');
 
   return (
     <div className="min-h-screen bg-[#111] text-white flex flex-col page-transition">
@@ -21,7 +21,7 @@ export default async function WorksPage() {
 
       {/* Main Container - Figma Auto Layout */}
       <div className="flex flex-col items-start gap-[240px] w-full p-6 md:p-10 flex-1">
-        <WorksList posts={worksPosts} />
+        <WorksList posts={releasePosts} basePath="/works" />
       </div>
 
       {/* Footer - Social Links */}
@@ -29,4 +29,3 @@ export default async function WorksPage() {
     </div>
   );
 }
-

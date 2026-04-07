@@ -16,7 +16,7 @@ export default async function Home() {
   const posts = getAllPosts();
   
   // プリロードする画像URLのリストを作成
-  const DEFAULT_THUMBNAIL = 'https://assets.nozaqi.work/nzq/portfolio/images/nzq.png';
+  const DEFAULT_THUMBNAIL = 'https://assets.nozaqi.work/nzq/portfolio/images/portfolio.png';
   const imageUrls = [DEFAULT_THUMBNAIL];
   
   // 各記事のサムネイルを追加（重複を除去）

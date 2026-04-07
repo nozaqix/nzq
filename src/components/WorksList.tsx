@@ -33,7 +33,7 @@ export default function WorksList({ posts, basePath = '/works' }: WorksListProps
   };
 
   // 現在表示するサムネイルを決定（ホバー中の記事のサムネイル、またはデフォルト）
-  const DEFAULT_THUMBNAIL = 'https://assets.nozaqi.work/nzq/portfolio/images/nzq.png';
+  const DEFAULT_THUMBNAIL = 'https://assets.nozaqi.work/nzq/portfolio/images/portfolio.png';
   const currentThumbnail = hoveredThumbnail || DEFAULT_THUMBNAIL;
 
   return (
