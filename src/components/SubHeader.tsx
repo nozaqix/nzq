@@ -7,6 +7,11 @@ export default function SubHeader() {
         <span>{'nozaqi'}</span>
       </div>
       <div>
+        <span>Job</span>
+        <span>{' : '}</span>
+        <span>{"Composer"}</span>
+      </div>
+      <div>
         <span>About</span>
         <span>{' : '}</span>
         <span>{"This is the portfolio site of nozaqi, who works as a composer."}</span>
