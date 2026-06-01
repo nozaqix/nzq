@@ -17,6 +17,10 @@
     "remark-html": "^16.0.1",
     "remark-gfm": "^4.0.0"
   },
+  "volta": {
+    "node": "22.12.0",
+    "npm": "11.8.0"
+  },
   "devDependencies": {
     "typescript": "^5.5.0",
     "@types/node": "^20.14.0",
