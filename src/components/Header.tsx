@@ -25,6 +25,12 @@ export default function Header() {
             Release
           </Link>
           <Link
+            href="/profile/"
+            className="text-gray-300 hover:text-white transition-colors"
+          >
+            Profile
+          </Link>
+          <Link
             href="/contact/"
             className="text-gray-300 hover:text-white transition-colors"
           >
