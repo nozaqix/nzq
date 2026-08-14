@@ -209,7 +209,7 @@ export default async function PostPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#111] text-white flex flex-col page-transition">
+    <div className="min-h-screen bg-black text-white flex flex-col page-transition">
       {/* バックグラウンドで画像をプリロード（ローディング画面は表示しない） */}
       <BackgroundImagePreloader imageUrls={imageUrls} />
 

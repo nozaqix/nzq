@@ -38,7 +38,7 @@ export default async function ProfilePage() {
   const { title, html } = await getProfileContent();
 
   return (
-    <div className="min-h-screen bg-[#111] text-white flex flex-col page-transition">
+    <div className="min-h-screen bg-black text-white flex flex-col page-transition">
       <Header />
 
       <div className="flex flex-col items-start gap-[240px] w-full p-6 md:p-10 flex-1">
