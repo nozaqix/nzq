@@ -48,7 +48,7 @@ export default async function ContactPage() {
   const { title, html } = await getContactContent();
 
   return (
-    <div className="min-h-screen bg-[#111] text-white flex flex-col page-transition">
+    <div className="min-h-screen bg-black text-white flex flex-col page-transition">
       {/* Header */}
       <Header />
 

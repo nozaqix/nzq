@@ -2,7 +2,7 @@ import { getAllPosts } from '@/lib/posts';
 import Header from '@/components/Header';
 import SubHeader from '@/components/SubHeader';
 import Footer from '@/components/Footer';
-import PostsList from '@/components/PostsList';
+import WorksGrid from '@/components/WorksGrid';
 import BackgroundImagePreloader from '@/components/BackgroundImagePreloader';
 import type { Metadata } from 'next';
 
@@ -27,7 +27,7 @@ export default async function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-[#111] text-white flex flex-col page-transition">
+    <div className="min-h-screen bg-black text-white flex flex-col page-transition">
       {/* バックグラウンドで画像をプリロード（ローディング画面は表示しない） */}
       <BackgroundImagePreloader imageUrls={imageUrls} />
 
@@ -41,7 +41,7 @@ export default async function Home() {
 
       {/* Main Container - Figma Auto Layout */}
       <div className="flex flex-col items-start gap-[240px] w-full p-6 md:p-10 flex-1">
-        <PostsList posts={posts} />
+        <WorksGrid posts={posts} />
       </div>
 
       {/* Footer - Social Links */}
